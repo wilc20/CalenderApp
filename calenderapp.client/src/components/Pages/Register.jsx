@@ -1,12 +1,10 @@
 import React, { useState, useContext } from 'react'
-import axios from "axios";
 import { AuthContext } from '../../context/AuthProvider';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const Register = () => {
     const { register } = useContext(AuthContext);
     const navigate = useNavigate();
-    const location = useLocation();
 
     const [values, setValues] = useState({
         Username: '',
@@ -38,7 +36,7 @@ const Register = () => {
 
         const emailPattern = /^ [\w\.-] + @[\w\.-] +\.\w+$/;
 
-        if (!emailPattern.test(values.Email){
+        if (!emailPattern.test(values.Email)){
             validationErrors.email = "Please enter a valid email address with domain."
         }
 
@@ -87,6 +85,7 @@ const Register = () => {
                     </div>
                     <button type="submit">Register</button>
                 </form>
+                <Link to="/login">Login</Link>
             </div>
         </div>
     )

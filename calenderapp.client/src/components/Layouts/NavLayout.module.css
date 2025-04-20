@@ -1,0 +1,15 @@
+body {
+}
+
+nav {
+    width: 100%;
+    display:flex;
+}
+
+nav span {
+    text-align: center;
+}
+.logout {
+    /*float: right;*/
+    margin-left: 75%;
+}

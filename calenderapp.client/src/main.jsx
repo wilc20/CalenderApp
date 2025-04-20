@@ -8,9 +8,11 @@ import App from './App.jsx'
 //const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
-        <BrowserRouter>
-            <App />
-        </BrowserRouter>
+    <StrictMode>
+        <AuthProvider>
+            <BrowserRouter>
+                <App />
+            </BrowserRouter>
+        </AuthProvider>
   </StrictMode>,
 )
