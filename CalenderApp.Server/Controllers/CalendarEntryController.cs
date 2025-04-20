@@ -61,7 +61,35 @@ namespace CalenderApp.Server.Controllers
 
             await _repo.CreateAsync(newCalenderEntry);
 
-            return CreatedAtAction(nameof(GetById), new { id = newCalenderEntry }, newCalenderEntry.ToCalendarEntryDto());
+            return CreatedAtAction(nameof(GetById), new { id = newCalenderEntry.Id }, newCalenderEntry.ToCalendarEntryDto());
+        }
+
+        [HttpPut]
+        [Route("{id}")]
+        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateCalendarEntryDto updateEntryDto)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) { return Unauthorized();}
+
+            var existingEntry = await _repo.UpdateAsync(id, user.Id, updateEntryDto.ToCalendarEntryFromUpdate());
+            if (existingEntry == null)
+            {
+               return NotFound("Calendar entry not found.");
+            }
+
+            return Ok(existingEntry.ToCalendarEntryDto());
+        }
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<IActionResult> Delete([FromRoute] int id)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if(user == null) { return Unauthorized(); }
+
+            var calendarEntry = await _repo.DeleteAsync(id, user.Id);
+            if (calendarEntry == null) { return NotFound("Calendar entry does not exist."); }
+
+            return Ok();
         }
     }
 }

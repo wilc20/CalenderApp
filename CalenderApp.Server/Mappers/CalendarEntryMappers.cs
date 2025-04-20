@@ -28,5 +28,15 @@ namespace CalenderApp.Server.Mappers
                 UserId = userId,
             };
         }
+
+        public static CalendarEntry ToCalendarEntryFromUpdate(this UpdateCalendarEntryDto calendarEntryDto)
+        {
+            return new CalendarEntry
+            {
+                Title = calendarEntryDto.Title,
+                Description = calendarEntryDto.Description,
+                EventDateTime = calendarEntryDto.EventDateTime
+            };
+        }
     }
 }

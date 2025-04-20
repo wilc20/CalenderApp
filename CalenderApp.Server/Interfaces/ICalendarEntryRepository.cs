@@ -8,5 +8,8 @@ namespace CalenderApp.Server.Interfaces
         Task<CalendarEntry?> GetByIdForUserAsync(int id);
 
         Task<CalendarEntry> CreateAsync(CalendarEntry calendarEntry);
+        Task<CalendarEntry?> UpdateAsync(int id, string userId,CalendarEntry calendarEntry);
+
+        Task<CalendarEntry?> DeleteAsync(int id, string userId);
     }
 }
