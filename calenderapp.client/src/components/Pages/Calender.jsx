@@ -1,6 +1,7 @@
 import React from 'react'
 import { useEffect, useState } from 'react';
 import classes from "./Calender.module.css";
+import axios from "axios";
 
 const Calender = () => {
 
@@ -81,8 +82,6 @@ const Calender = () => {
         }
         return display;
     }
-
-    //const events =
 
     return (
         <div>

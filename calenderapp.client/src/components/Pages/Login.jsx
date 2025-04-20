@@ -1,17 +1,18 @@
 import React, { useState, useContext } from 'react'
-import axios from "axios";
+//import api from "axios";
 import { AuthContext } from '../../context/AuthProvider';
 import { useNavigate, useLocation } from 'react-router-dom';
 
-const Register = () => {
-    const { register } = useContext(AuthContext);
+const Login = () => {
+
+    const { login } = useContext(AuthContext);
     const navigate = useNavigate();
     const location = useLocation();
+    const from = location.state?.from?.pathname || "/";
 
     const [values, setValues] = useState({
         Username: '',
-        Password: '',
-        Email: ''
+        Password: ''
     });
     const [validation, setValidation] = useState({});
 
@@ -36,12 +37,6 @@ const Register = () => {
             validationErrors.Password += "Password requires at least 1 uppercase character, 1 lowercase character, 1 number and a special character. ";
         }
 
-        const emailPattern = /^ [\w\.-] + @[\w\.-] +\.\w+$/;
-
-        if (!emailPattern.test(values.Email){
-            validationErrors.email = "Please enter a valid email address with domain."
-        }
-
         if (Object.keys(validationErrors).length) {
             setValidation({ ...validationErrors });
             return false;
@@ -58,21 +53,19 @@ const Register = () => {
     const submitValues = async (event) => {
         event.preventDefault();
         if (isValid()) {
-            await register(values.Username, values.Password, values.Email);
-            navigate("/", { replace: true });
+            /*const { data } = await axios.get('/Login');
+            console.log(data);*/
+            await login(values.Username, values.Password);
+            navigate(from, { replace: true });
         }
+
+        console.log(values);
     }
 
     return (
         <div>
             <div>
                 <form onSubmit={submitValues}>
-                    <div>
-                        <label htmlFor="Email">Email</label>
-                        <input type="text" name="Email" onChange={handleInput} required />
-                        {validation?.Email && <p>validation.Email</p>}
-
-                    </div>
                     <div>
                         <label htmlFor="Username">Username</label>
                         <input type="text" name="Username" onChange={handleInput} required />
@@ -85,11 +78,11 @@ const Register = () => {
                         {validation?.Password && <p>validation.Password</p>}
 
                     </div>
-                    <button type="submit">Register</button>
+                    <button type="submit">Login</button>
                 </form>
             </div>
         </div>
     )
 }
 
-export default Register
+export default Login

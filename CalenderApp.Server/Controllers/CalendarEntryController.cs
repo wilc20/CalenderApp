@@ -38,7 +38,7 @@ namespace CalenderApp.Server.Controllers
 
             return Ok(calenderEntryDto);
         }
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
             var singleEvent = await _repo.GetByIdForUserAsync(id);
@@ -54,6 +54,8 @@ namespace CalenderApp.Server.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateCalendarEntryDto calenderEntryDto)
         {
+            if (!ModelState.IsValid) {  return BadRequest(ModelState); }
+
             var user = await _userManager.GetUserAsync(User);
             if (user == null) { return Unauthorized(); }
 
@@ -65,9 +67,11 @@ namespace CalenderApp.Server.Controllers
         }
 
         [HttpPut]
-        [Route("{id}")]
+        [Route("{id:int}")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateCalendarEntryDto updateEntryDto)
         {
+            if (!ModelState.IsValid) { return BadRequest(ModelState); }
+
             var user = await _userManager.GetUserAsync(User);
             if (user == null) { return Unauthorized();}
 
@@ -80,7 +84,7 @@ namespace CalenderApp.Server.Controllers
             return Ok(existingEntry.ToCalendarEntryDto());
         }
         [HttpDelete]
-        [Route("{id}")]
+        [Route("{id:int}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             var user = await _userManager.GetUserAsync(User);
