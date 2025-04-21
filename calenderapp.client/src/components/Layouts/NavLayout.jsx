@@ -7,12 +7,12 @@ const NavLayout = () => {
     const { user, loading, logout } = useContext(AuthContext);
 
     return (
-        <div>
+        <div >
             {!loading && <nav>
-                {user && <span>Welcome, {user}!</span>}
+                {user && <span><h5>Welcome, {user}!</h5></span>}
                 {user && <button className={classes.logout} onClick={logout}>Logout</button>}
             </nav>}
-            <main>
+            <main className={classes.main}>
                 <Outlet />
             </main>
         </div>

@@ -34,7 +34,7 @@ namespace CalenderApp.Server.Controllers
             if (user == null) { return Unauthorized(); }
 
             var usersEntries = await _repo.GetAllByUserIdAsync(user.Id);
-            var calenderEntryDto = usersEntries.Select(s => s.ToCalendarEntryDto());
+            var calenderEntryDto = usersEntries.Select(s => s.ToUserFromGet());
 
             return Ok(calenderEntryDto);
         }

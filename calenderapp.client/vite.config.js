@@ -34,8 +34,9 @@ if (!fs.existsSync(certFilePath) || !fs.existsSync(keyFilePath)) {
     }
 }
 
-const target = env.ASPNETCORE_HTTPS_PORT ? `https://localhost:${env.ASPNETCORE_HTTPS_PORT}` :
-    env.ASPNETCORE_URLS ? env.ASPNETCORE_URLS.split(';')[0] : 'https://localhost:7026';
+/*const target = env.ASPNETCORE_HTTPS_PORT ? `https://localhost:${env.ASPNETCORE_HTTPS_PORT}` :
+    env.ASPNETCORE_URLS ? env.ASPNETCORE_URLS.split(';')[0] : 'https://localhost:7213';*/
+const target = 'https://localhost:7026';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -51,17 +52,20 @@ export default defineConfig({
                 target,
                 secure: false
             },
-            '^/Calender': {
+            '^/calendar': {
                 target,
                 secure: false
             },
-            '^/Auth': {
+            '^/auth': {
                 target,
                 secure: false
             },
-            
+            '^/calendarEntry': {
+                target,
+                secure: false
+            }
         },
-        port: parseInt(env.DEV_SERVER_PORT || '52771'),
+        port: parseInt(env.DEV_SERVER_PORT || '61583'),
         https: {
             key: fs.readFileSync(keyFilePath),
             cert: fs.readFileSync(certFilePath),

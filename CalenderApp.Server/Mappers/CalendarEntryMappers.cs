@@ -18,6 +18,18 @@ namespace CalenderApp.Server.Mappers
             };
         }
 
+        public static CalendarEntryDto ToUserFromGet(this CalendarEntry calendarEntryDto) 
+        {
+            return new CalendarEntryDto
+            {
+                Id = calendarEntryDto.Id,
+                Title = calendarEntryDto.Title,
+                Description = calendarEntryDto.Description,
+                EventDateTime = calendarEntryDto.EventDateTime,
+                CreatedDate = calendarEntryDto.CreatedDate,
+            };
+        }
+
         public static CalendarEntry ToCalendarEntryFromCreate(this CreateCalendarEntryDto calendarEntryDto, string userId)
         {
             return new CalendarEntry

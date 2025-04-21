@@ -1,46 +1,46 @@
 body {
 }
 
-.calender {
+.calendar {
     width: 90%;
     margin-left: auto;
     margin-right: auto;
 }
 
-.calender__box {
+.calendar__box {
     display: inline-block;
     width: 150px;
     height: 200px;
 }
 
-.calender__control {
+.calendar__control {
     display: flex;
     justify-content: space-evenly;
     margin: 2%;
 }
 
-.calender__box_container {
+.calendar__box_container {
     height: 100%;
     display: flex;
     flex-direction: column;
 }
 
-.calender__box_date {
+.calendar__box_date {
     height: 10%;
     margin: 0;
 }
 
-.calender__box_eventlist {
+.calendar__box_eventlist {
     padding-left: 0px;
     list-style-type: none;
     overflow-y: clip;
     height: 80%
 }
 
-.calender__box_event {
+.calendar__box_event {
     background-color: brown;
 }
 
-.calender__box_event + .calender__box_event {
+.calendar__box_event + .calendar__box_event {
     margin-top: 4%;
 }

@@ -1,0 +1,38 @@
+div {
+    height: 100%;
+}
+
+.entryBase {
+    width: 70%;
+    height: 100vh;
+    margin: 0 auto;
+}
+
+.formInputs {
+    display: flex;
+    flex-direction: column;
+    /*background-color: cornflowerblue;*/
+    padding: 20px;
+    height: 70%;
+}
+
+.formInputs > div+div {
+    /*margin: 20px auto;*/
+}
+
+.formInputs > div {
+    min-width: 500px;
+    max-width: 90%;
+    margin: 0 auto;
+    text-align: start;
+    display: flex;
+    flex-direction: column;
+}
+
+.entryButtons {
+    margin: 5%;
+}
+
+.updateButton {
+    margin: 5% auto;
+}
