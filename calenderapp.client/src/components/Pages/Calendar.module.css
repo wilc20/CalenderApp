@@ -44,3 +44,19 @@ body {
 .calendar__box_event + .calendar__box_event {
     margin-top: 4%;
 }
+
+.entriesList {
+    list-style-type: none;
+    padding: 0;
+    overflow-y:scroll;
+    height: 80%;
+    margin: 0 auto;
+}
+
+dialog {
+    width: 70%;
+    height: 60%;
+}
+dialog > div {
+    height:90%;
+}

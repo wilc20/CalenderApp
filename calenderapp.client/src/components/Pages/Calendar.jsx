@@ -4,16 +4,17 @@ import Modal from '../Elements/Modal';
 import CalendarDayListItem from '../Elements/CalendarDayListItem';
 import { CalendarContext } from '../../context/CalendarProvider';
 import classes from "./Calendar.module.css";
+import CreateEntryForm from '../Elements/CreateEntryForm';
 
 const Calender = () => {
 
     const [userDateTime, setUserDateTime] = useState();
     const [currentCalendar, setCurrentCalendar] = useState();
-    const [content, setContent] = useState();
-    const [modalEntries, setModalEntires] = useState();
+    const [modalEntries, setModalEntries] = useState();
+    const [chosenDate, setChosenDate] = useState();
 
-    const { createEntry, retrieveCalendarEntries, entries, loading } = useContext(CalendarContext);
-    
+    const { entries, loading, retrieveCalendarEntries } = useContext(CalendarContext);
+
 
     const createEntryDialog = useRef();
     const viewEntriesDialog = useRef();
@@ -28,39 +29,8 @@ const Calender = () => {
             minutes: currentDate.getMinutes(),
         };
         setUserDateTime({ ...dateTime });
-        //let daysInMonth = new Date(dateTime.year, dateTime.month, 0).getDate();
         setCurrentCalendar({ month: dateTime.month, year: dateTime.year });
-        let exampleContent = [
-            {
-                day:    28,
-                month:  4,
-                year: 2025,
-                message: 'Dentists appointment at 3pm'
-            },
-            {
-                day: 28,
-                month: 4,
-                year: 2025,
-                message: 'Meal at 5pm'
-            },
-            {
-                day: 28,
-                month: 4,
-                year: 2025,
-                message: 'MOT test payment to be made.'
-            },
-            {
-                day: 28,
-                month: 4,
-                year: 2025,
-                message: 'Leg amputation at the medical hospital emergency center.'
-            },
-        ];
-        setContent([...exampleContent]);
-        /*const loadCalendar = async () => {
-            const calendarEntries = retrieveCalendarEntries();
-        }*/
-        
+
     }, []);
 
     const changeCalendar = (amount) => {
@@ -77,36 +47,18 @@ const Calender = () => {
         setCurrentCalendar(newAmount);
     };
 
-    
     const currentCalendarDays = () => {
-        let daysInMonth = new Date(currentCalendar.year, currentCalendar.month, 0).getDate();
-        let display = [];
-        for (let i = 1; i <= daysInMonth; i++) {
-            let calDayContent = content.filter(cont => cont.day == i && cont.month == currentCalendar.month && cont.year == currentCalendar.year);
-            if (calDayContent) console.log(calDayContent);
-            display.push(<button className={classes.calendar__box} onClick={() => console.log(`Day:${i}`)}>
-                <div className={classes.calendar__box_container}>
-                    <p className={classes.calendar__box_date}>{i}</p>
-                    <ul className={classes.calendar__box_eventlist}>
-                        {calDayContent.map(dayCont => <li className={classes.calendar__box_event}>{dayCont.message}</li>)}
-                    </ul>
-                </div>
-            </button>);
-        }
-        return display;
-    };
-
-    const currentCalendarDays2 = () => {
+        if (!currentCalendar) return [];
         let daysInMonth = new Date(currentCalendar.year, currentCalendar.month, 0).getDate();
         let display = [];
         for (let i = 1; i <= daysInMonth; i++) {
             let calDayContent = entries.filter(entry => entry.day == i && entry.month == currentCalendar.month && entry.year == currentCalendar.year);
-            if (calDayContent) console.log(calDayContent);
-            display.push(<button className={classes.calendar__box} onClick={() => calendarDayHandler(calDayContent)}>
+            //if (calDayContent) console.log(calDayContent);
+            display.push(<button key={"day" + i} id={i} name={`${currentCalendar.year}-${currentCalendar.month}-${i}`} className={classes.calendar__box} onClick={(e) => calendarDayHandler(calDayContent, e.currentTarget.name)}>
                 <div className={classes.calendar__box_container}>
                     <p className={classes.calendar__box_date}>{i}</p>
                     <ul className={classes.calendar__box_eventlist}>
-                        {calDayContent.map(dayCont => <li className={classes.calendar__box_event}>{dayCont.title}</li>)}
+                        {calDayContent.map(dayCont => <li key={dayCont.title + "buttonContent"} className={classes.calendar__box_event}>{dayCont.title}</li>)}
                     </ul>
                 </div>
             </button>);
@@ -114,37 +66,45 @@ const Calender = () => {
         return display;
     };
 
-    const calendarDayHandler = (todaysEntries) => {
-        console.log(todaysEntries);
-        setModalEntires(todaysEntries);
+    const calendarDayHandler = (todaysEntries, todaysDate) => {
+        console.log(todaysDate);
+        const [year, month, day] = todaysDate.split('-');
+        const formattedTodaysDate = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}T00:00`;
+        setModalEntries(todaysEntries);
+        setChosenDate(formattedTodaysDate);
+        console.log('formattedDate', formattedTodaysDate);
         viewEntriesDialog.current.showModal();
     };
 
+    const createEntryHandler = async () => {
+        createEntryDialog.current.close();
+        await retrieveCalendarEntries();
+    };
+
+    const openCreateEntryHandler = () => {
+
+        createEntryDialog.current.showModal();
+    }
+
     return (
         <div>
-            <Modal ref={createEntryDialog} submitButton={{ title: 'Create entry', action: () => { ; createEntryDialog.current.close(); }}}>
-                <div>
-                    <label htmlFor="Title">Title</label>
-                    <input type="text" name="Title" required />
-                </div>
-                <div>
-                    <input type="text" name="Description" required />
-                </div>
+            <Modal ref={createEntryDialog}>
+                <CreateEntryForm onSuccess={() => createEntryHandler()} chosenDate={chosenDate} />
             </Modal>
             <Modal ref={viewEntriesDialog}>
-                <ul>
-                    {modalEntries && modalEntries.map(mEntry => <CalendarDayListItem itemDetails={mEntry} />)}
-                </ul>
-                
+                <div>
+                    <ul className={classes.entriesList}>
+                        {modalEntries && modalEntries.map(mEntry => <CalendarDayListItem key={"entry" + mEntry.title} itemDetails={mEntry} />)}
+                    </ul>
+                    <button onClick={() => openCreateEntryHandler()}>Create Entry</button>
+                </div>
             </Modal>
             <div className={classes.calendar}>
                 <div className={classes.calendar__control}><button onClick={() => changeCalendar(-1)}>{`<-`}</button>{userDateTime && <p>{`${currentCalendar.month}/${currentCalendar.year}`}</p>}<button onClick={() => changeCalendar(1)} >{`->`}</button></div>
-                {/*currentCalendar &&  currentCalendarDays()*/}
-                {(entries && !loading) && currentCalendarDays2()}
+                {(currentCalendar && entries && !loading) && currentCalendarDays()}
             </div>
-            <button onClick={() => console.log(entries)}>Get Entries</button>
         </div>
     )
-}
+};
 
-export default Calender
+export default Calender;

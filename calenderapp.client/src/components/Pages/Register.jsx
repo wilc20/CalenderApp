@@ -68,19 +68,19 @@ const Register = () => {
                     <div>
                         <label htmlFor="Email">Email</label>
                         <input type="text" name="Email" onChange={handleInput} required />
-                        {validation?.Email && <p>validation.Email</p>}
+                        {validation?.Email && <p>{validation.Email}</p>}
 
                     </div>
                     <div>
                         <label htmlFor="Username">Username</label>
                         <input type="text" name="Username" onChange={handleInput} required />
-                        {validation?.Username && <p>validation.Username</p>}
+                        {validation?.Username && <p>{validation.Username}</p>}
 
                     </div>
                     <div>
                         <label htmlFor="Password">Password</label>
                         <input type="text" name="Password" onChange={handleInput} required />
-                        {validation?.Password && <p>validation.Password</p>}
+                        {validation?.Password && <p>{validation.Password}</p>}
 
                     </div>
                     <button type="submit">Register</button>

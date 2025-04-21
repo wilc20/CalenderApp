@@ -75,6 +75,8 @@ namespace CalenderApp.Server.Controllers
             var user = await _userManager.GetUserAsync(User);
             if (user == null) { return Unauthorized();}
 
+            System.Diagnostics.Debug.WriteLine($"DTO value: {updateEntryDto.EventDateTime}");
+
             var existingEntry = await _repo.UpdateAsync(id, user.Id, updateEntryDto.ToCalendarEntryFromUpdate());
             if (existingEntry == null)
             {

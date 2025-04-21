@@ -37,8 +37,17 @@ export function CalendarProvider({ children }) {
 
     const retrieveCalendarEntries = async () => {
         try {
-            const retrievedEntries = await api.get(`/CalendarEntry`);
-            setEntries([...retrievedEntries]);
+            api.get('/CalendarEntry')
+            .then(res => {
+                let formattedData = res.data.map(r => {
+                    const date = new Date(r.eventDateTime);
+                    return { ...r, year: date.getFullYear(), month: (date.getMonth()+1), day: date.getDate(), time: date.toTimeString().split(' ')[0]}
+                });
+                
+                setEntries([...formattedData]);
+            })
+            .catch(() => setEntries(null))
+            .finally(() => setLoading(false));
             return { success: true }
         } catch (err) {
             const errMessage = err.response?.data || "Failed to retrieve entries.";
@@ -46,9 +55,9 @@ export function CalendarProvider({ children }) {
         }
     };
 
-    const createEntry = async (title, description, dateTime) => {
+    const createEntry = async (title, description, eventDateTime) => {
         try {
-            const createdEntry = await api.post('/CalendarEntry/create', { title, description, dateTime });
+            const createdEntry = await api.post('/CalendarEntry', { title, description, eventDateTime });
             setCurrentEntry({ ...createdEntry });
             return { success: true };
         } catch (err) {
@@ -59,7 +68,10 @@ export function CalendarProvider({ children }) {
 
     const updateEntry = async (id, title, description, dateTime) => {
         try {
-            const updatedEntry = await api.put(`/CalendarEntry/${id}`, { title, description, dateTime });
+            console.log('preFormattedDate:', dateTime);
+            let formattedDate = new Date(dateTime).toISOString();
+            console.log('formattedDate:', formattedDate);
+            const updatedEntry = await api.put(`/CalendarEntry/${id}`, { title, description, eventDateTime: formattedDate });
             setCurrentEntry({ ...updatedEntry });
             return {success: true}
         } catch (err) {

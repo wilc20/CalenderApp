@@ -56,6 +56,9 @@ namespace CalenderApp.Server.Repository
             existingEntry.Description = calendarEntry.Description;
             existingEntry.EventDateTime = calendarEntry.EventDateTime;
 
+            System.Diagnostics.Debug.WriteLine($"Before Save existingEntry: {existingEntry.EventDateTime}");
+            System.Diagnostics.Debug.WriteLine($"Before Save calendarEntry: {calendarEntry.EventDateTime}");
+
             await _context.SaveChangesAsync();
 
             return existingEntry;
